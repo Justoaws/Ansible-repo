@@ -1,0 +1,48 @@
+- name: Deploy Apache on Ubuntu EC2
+  hosts: ubuntu_nodes
+  vars:
+    service: apt
+
+  tasks:
+    - name: Update apt package manager
+      ansible.builtin.apt:
+        name: '*'
+        state: latest
+    - name: Install apache apt
+      ansible.builtin.apt:
+        name: "{{ service }}"
+        state: latest
+    - name: Start Apache service apt, if not started
+      ansible.builtin.apt:
+        name: "{{ service }}"
+        state: present
+    - name: Start Apache on boot
+      ansible.builtin.apt:
+        name: "{{ service }}"
+        state: present
+    - name: Ensure /var/www/html directory exists
+      file:
+        path: /var/www/html
+        state: directory
+    - name: Copy index.html to Apache web root
+      ansible.builtin.copy:
+        src: index.html
+        dest: /var/www/html
+
+- name: Deploy Apache on Ubuntu EC2
+  hosts: ubuntu
+  vars: 
+    package: apt
+
+  tasks:
+    - name: Install Git
+  apt:
+    name: git
+    state: latest
+
+- name: Display the name "Justo" on all EC2 instances
+  hosts: all
+  tasks:
+    - name: Display my name below
+      ansible.builtin.debug:
+        msg: "Justo Mebodo"
